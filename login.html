@@ -1,0 +1,121 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080b18"><title>RG GAMER BOY FF | Login</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 15%,#34206c,transparent 38%),radial-gradient(circle at 85% 80%,#651c35,transparent 36%),#080b18;color:white;font-family:Arial,sans-serif}.card{width:min(100%,430px);padding:26px;border:1px solid #ffffff26;border-radius:22px;background:#101629ed;box-shadow:0 22px 70px #0009;text-align:center}.brandimg{width:140px;height:140px;max-width:55%;object-fit:contain;border-radius:18px;margin:0 auto 14px;display:block}h1{font-size:clamp(22px,6vw,30px);margin:8px 0;letter-spacing:1px}p{color:#b9c3dc;font-size:14px;line-height:1.5}.tabs{display:flex;gap:8px;margin:22px 0 16px}.tabs button,.submit,.continue{border:0;border-radius:10px;padding:13px;font-weight:800;cursor:pointer}.tabs button{flex:1;background:#202b45;color:#dce5ff}.tabs button.active{background:#7546ed;color:white}input{width:100%;padding:14px;margin:8px 0;border:1px solid #394663;border-radius:10px;background:#080f20;color:white;font-size:16px;outline:none}input:focus{border-color:#9a7bff}.submit,.continue{width:100%;margin-top:12px;background:linear-gradient(100deg,#7546ed,#d12e75);color:white;font-size:16px}.small{font-size:12px;color:#98a6c5}.error{color:#ff8f9e;min-height:22px;font-size:13px}.hidden{display:none!important}
+</style>
+<style id="rg-login-customizer-style">
+:root{
+ --rg-page-bg:#080b18;--rg-card-bg:#101629ed;--rg-text:#ffffff;--rg-muted:#b9c3dc;
+ --rg-primary:#7546ed;--rg-secondary:#d12e75;--rg-border:#ffffff26;
+ --rg-card-radius:22px;--rg-button-radius:10px;--rg-input-radius:10px;
+ --rg-card-width:430px;--rg-logo-size:140px;--rg-button-font:16px;
+ --rg-button-pad:13px;--rg-font:Arial,sans-serif;--rg-card-border:1px solid var(--rg-border);
+}
+body{background:var(--rg-page-bg)!important;color:var(--rg-text)!important;font-family:var(--rg-font)!important}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background-image:var(--rg-bg-image,none);background-position:center;background-size:cover;background-repeat:no-repeat;pointer-events:none}
+.card{width:min(100%,var(--rg-card-width))!important;background:var(--rg-card-bg)!important;color:var(--rg-text)!important;border:var(--rg-card-border)!important;border-radius:var(--rg-card-radius)!important}
+h1{color:var(--rg-text)!important}
+p,.small{color:var(--rg-muted)!important}
+input{border-radius:var(--rg-input-radius)!important;border-color:var(--rg-border)!important;color:var(--rg-text)!important}
+.tabs button.active{background:var(--rg-primary)!important;color:#fff!important}
+.submit,.continue{background:linear-gradient(100deg,var(--rg-primary),var(--rg-secondary))!important;border-radius:var(--rg-button-radius)!important;padding:var(--rg-button-pad)!important;font-size:var(--rg-button-font)!important}
+.brandimg{width:var(--rg-logo-size)!important;height:var(--rg-logo-size)!important;border-radius:var(--rg-image-radius,18px)!important;border:var(--rg-image-frame,0)!important}
+#logoutBtn{border-radius:var(--rg-button-radius)!important}
+</style>
+
+</head><body><main class="card">
+<img class="brandimg" src="https://i.supaimg.com/cc740f2b-876c-4dd7-bbf2-16d636413b82/85320e1a-9a75-4178-90bb-a7f01267a661.png" alt="RG GAMER BOY FF Official">
+<h1>RG GAMER BOY FF</h1><p>Create an account or log in to your account.</p>
+<section id="authArea"><div class="tabs"><button id="signupTab" class="active" type="button">Sign Up</button><button id="loginTab" type="button">Login</button></div>
+<form id="authForm"><input id="username" autocomplete="username" minlength="5" maxlength="12" placeholder="Username (5–12 characters)" required>
+<input id="password" type="password" autocomplete="new-password" minlength="8" maxlength="15" placeholder="Password (8–15 characters)" required>
+<input id="confirm" type="password" autocomplete="new-password" minlength="8" maxlength="15" placeholder="Confirm Password" required>
+<button class="submit" id="submitBtn" type="submit">Create Account</button></form><p class="small">Username: 5–12 letters, numbers, or underscores. Password: 8–15 characters.</p></section>
+<section id="continueArea" class="hidden"><p>You are already logged in.</p><button class="continue" id="continueBtn" type="button">Continue</button><button id="logoutBtn" type="button" style="margin-top:12px;background:#29334b;color:white;border:0;border-radius:9px;padding:12px;width:100%">Logout</button></section><div class="error" id="message" role="status"></div></main>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+import{getAuth,setPersistence,browserLocalPersistence,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+const firebaseConfig={apiKey:"AIzaSyD6hyR4O5Sfb3VWLq5k7RLtoKifI7aiLf8",authDomain:"rg-gamer-boy-ff-79de8.firebaseapp.com",databaseURL:"https://rg-gamer-boy-ff-79de8-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"rg-gamer-boy-ff-79de8",storageBucket:"rg-gamer-boy-ff-79de8.firebasestorage.app",messagingSenderId:"699276161086",appId:"1:699276161086:web:38531927307cddcc08a16f",measurementId:"G-TRX2QKQFQF"};
+const auth=getAuth(initializeApp(firebaseConfig));await setPersistence(auth,browserLocalPersistence);
+const $=id=>document.getElementById(id);let mode="signup";
+function setMode(m){mode=m;$("signupTab").classList.toggle("active",m==="signup");$("loginTab").classList.toggle("active",m==="login");$("confirm").classList.toggle("hidden",m!=="signup");$("confirm").required=m==="signup";$("submitBtn").textContent=m==="signup"?"Create Account":"Login";$("message").textContent=""}
+$("signupTab").onclick=()=>setMode("signup");$("loginTab").onclick=()=>setMode("login");
+const asEmail=u=>u.trim().toLowerCase()+"@username.rggamerboyff.invalid";
+function errorText(e){return({"auth/email-already-in-use":"This username is already taken.","auth/invalid-credential":"Incorrect username or password.","auth/weak-password":"Password must be 8–15 characters long.","auth/too-many-requests":"Too many attempts. Please try again later.","auth/network-request-failed":"Please check your internet connection."})[e.code]||"Please check the Firebase configuration. ("+e.code+")"}
+$("authForm").onsubmit=async e=>{e.preventDefault();$("message").textContent="";let u=$("username").value.trim(),p=$("password").value;if(!/^[A-Za-z0-9_]{5,12}$/.test(u)){$("message").textContent="Username must be 5–12 characters and may contain letters, numbers, or underscores.";return}if(p.length<8||p.length>15){$("message").textContent="Password must be 8–15 characters long.";return}if(mode==="signup"&&p!==$("confirm").value){$("message").textContent="The passwords do not match.";return}$("submitBtn").disabled=true;try{if(mode==="signup")await createUserWithEmailAndPassword(auth,asEmail(u),p);else await signInWithEmailAndPassword(auth,asEmail(u),p)}catch(err){$("message").textContent=errorText(err)}finally{$("submitBtn").disabled=false}};
+onAuthStateChanged(auth,user=>{if(user){$("authArea").classList.add("hidden");$("continueArea").classList.remove("hidden")}else{$("authArea").classList.remove("hidden");$("continueArea").classList.add("hidden")}});
+$("continueBtn").onclick=()=>{
+  if(!auth.currentUser){$("message").textContent="Your session has expired. Please log in again.";return}
+  $("continueBtn").disabled=true;
+  try{sessionStorage.setItem("rg_continue_once","1");location.href="index.html";}
+  catch(err){$("message").textContent="Unable to continue. Please allow session storage and try again.";$("continueBtn").disabled=false;}
+};
+$("logoutBtn").onclick=async()=>{
+  $("logoutBtn").disabled=true;$("message").textContent="";
+  try{await signOut(auth);$("authForm").reset();setMode("login");}
+  catch(err){$("message").textContent="Logout failed. Please try again.";}
+  finally{$("logoutBtn").disabled=false;}
+};
+</script>
+<script type="module" id="rg-login-customizer">
+import{initializeApp,getApps}from"https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+import{getDatabase,ref,onValue,get}from"https://www.gstatic.com/firebasejs/13.3.0/firebase-database.js";
+const cfg={apiKey:"AIzaSyD6hyR4O5Sfb3VWLq5k7RLtoKifI7aiLf8",authDomain:"rg-gamer-boy-ff-79de8.firebaseapp.com",databaseURL:"https://rg-gamer-boy-ff-79de8-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"rg-gamer-boy-ff-79de8",storageBucket:"rg-gamer-boy-ff-79de8.firebasestorage.app",messagingSenderId:"699276161086",appId:"1:699276161086:web:38531927307cddcc08a16f",measurementId:"G-TRX2QKQFQF"};
+const app=getApps().length?getApps()[0]:initializeApp(cfg),db=getDatabase(app);
+const $=id=>document.getElementById(id);
+const PAGE_BUILD_VERSION=0;
+const safeUrl=v=>{try{const u=new URL(String(v));return ["https:","http:"].includes(u.protocol)?u.href:""}catch{return ""}};
+function applySettings(d){
+ if(!d||typeof d!=="object")return;
+ const t=d.theme||{},root=document.documentElement.style;
+ const map={pageBg:"--rg-page-bg",cardBg:"--rg-card-bg",textColor:"--rg-text",mutedColor:"--rg-muted",primaryColor:"--rg-primary",secondaryColor:"--rg-secondary",borderColor:"--rg-border",cardRadius:"--rg-card-radius",buttonRadius:"--rg-button-radius",inputRadius:"--rg-input-radius",cardWidth:"--rg-card-width",logoSize:"--rg-logo-size",buttonFont:"--rg-button-font",buttonPadding:"--rg-button-pad",fontFamily:"--rg-font",imageRadius:"--rg-image-radius",imageFrame:"--rg-image-frame"};
+ for(const [k,v] of Object.entries(map))if(t[k]!=null)root.setProperty(v,String(t[k]));
+ if(t.backgroundImage){const u=safeUrl(t.backgroundImage);root.setProperty("--rg-bg-image",u?`url("${u}")`:"none")}else root.setProperty("--rg-bg-image","none");
+ const texts=d.text||{};
+ const textTargets={pageTitle:"h1",subtitle:"main.card>p",signupLabel:"#signupTab",loginLabel:"#loginTab",submitSignup:"#submitBtn",continueText:"#continueBtn"};
+ for(const [k,sel] of Object.entries(textTargets)){if(typeof texts[k]==="string"){const el=document.querySelector(sel);if(el)el.textContent=texts[k]}}
+ if(typeof texts.logoutText==="string"&&$("logoutBtn"))$("logoutBtn").textContent=texts.logoutText;
+ if(typeof texts.usernamePlaceholder==="string")$("username").placeholder=texts.usernamePlaceholder;
+ if(typeof texts.passwordPlaceholder==="string")$("password").placeholder=texts.passwordPlaceholder;
+ if(typeof texts.confirmPlaceholder==="string")$("confirm").placeholder=texts.confirmPlaceholder;
+ if(typeof texts.smallNote==="string"){const note=document.querySelector("#authArea .small");if(note)note.textContent=texts.smallNote}
+ if(d.logoUrl){const u=safeUrl(d.logoUrl);if(u&&document.querySelector(".brandimg"))document.querySelector(".brandimg").src=u}
+ for(const item of (Array.isArray(d.textOverrides)?d.textOverrides:[])){try{if(item.selector&&typeof item.text==="string")document.querySelectorAll(item.selector).forEach(el=>el.textContent=item.text)}catch{}}
+}
+onValue(ref(db,"loginSettings/current"),s=>{if(s.exists())applySettings(s.val())},{onlyOnce:true});
+get(ref(db,"loginSettings/current")).then(s=>{if(s.exists())applySettings(s.val())}).catch(()=>{});
+onValue(ref(db,"loginRelease/current"),async s=>{
+ if(!s.exists())return;
+ const rel=s.val()||{},latest=Number(rel.version||0),seen=Number(localStorage.getItem("rg_login_release_seen")||0);
+ if(latest<=seen)return;
+ let layer=document.getElementById("rgLoginUpdateGate");
+ if(!layer){
+  layer=document.createElement("div");layer.id="rgLoginUpdateGate";
+  layer.style.cssText="position:fixed;inset:0;z-index:99999;background:#050711f2;display:grid;place-items:center;padding:20px;color:white;font:15px Arial;overflow:auto";
+  layer.innerHTML='<div style="width:min(100%,440px);padding:24px;border:1px solid #555;border-radius:18px;background:#151b2e;text-align:center;box-shadow:0 20px 70px #0009"><div style="font-size:12px;letter-spacing:2px;color:#a995ff;font-weight:900">NEW UPDATE AVAILABLE</div><h2 style="margin:10px 0 16px">Website Update</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;text-align:left;margin:14px 0"><div style="background:#0b1122;padding:11px;border-radius:10px"><small style="color:#9eaccb">Release Date</small><div id="rgReleaseDate" style="font-weight:800;margin-top:5px">—</div></div><div style="background:#0b1122;padding:11px;border-radius:10px"><small style="color:#9eaccb">Release Time</small><div id="rgReleaseTime" style="font-weight:800;margin-top:5px">—</div></div><div style="background:#0b1122;padding:11px;border-radius:10px;grid-column:1/-1"><small style="color:#9eaccb">Update Size</small><div id="rgReleaseSize" style="font-weight:800;margin-top:5px">—</div></div></div><p id="rgLoginUpdateNote" style="color:#cbd5e1;text-align:left;white-space:pre-wrap"></p><button id="rgLoginUpdateBtn" style="width:100%;padding:14px;border:0;border-radius:10px;background:#7546ed;color:white;font-weight:900;cursor:pointer">UPDATE</button><div id="rgProcessing" style="display:none;margin-top:18px;text-align:left"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px"><b id="rgProcessingLabel">Processing update…</b><span id="rgProcessingPercent">0%</span></div><div style="height:10px;background:#303a55;border-radius:20px;overflow:hidden"><div id="rgProcessingBar" style="height:100%;width:0%;background:linear-gradient(90deg,#7546ed,#d12e75);transition:width .12s linear"></div></div><p id="rgProcessingHint" style="font-size:12px;text-align:center;margin-bottom:0">Please keep this page open until the update completes.</p></div></div>';
+  document.body.appendChild(layer);
+ }
+ const dateText=rel.releaseDate|| (rel.releaseAt?new Date(rel.releaseAt).toLocaleDateString():"Not set");
+ const timeText=rel.releaseTime|| (rel.releaseAt?new Date(rel.releaseAt).toLocaleTimeString():"Not set");
+ document.getElementById("rgReleaseDate").textContent=dateText;
+ document.getElementById("rgReleaseTime").textContent=timeText;
+ document.getElementById("rgReleaseSize").textContent=rel.displaySize||"—";
+ document.getElementById("rgLoginUpdateNote").textContent=rel.releaseNote||"A new version is available.";
+ const b=document.getElementById("rgLoginUpdateBtn");
+ b.onclick=async()=>{
+  b.disabled=true;b.style.opacity=".65";b.textContent="PROCESSING…";
+  const processing=document.getElementById("rgProcessing");processing.style.display="block";
+  const duration=Math.max(1000,Math.min(Number(rel.processingMs)||10000,86400000));
+  const bar=document.getElementById("rgProcessingBar"),pct=document.getElementById("rgProcessingPercent"),label=document.getElementById("rgProcessingLabel");
+  const started=Date.now();
+  await new Promise(resolve=>{const tick=()=>{const ratio=Math.min(1,(Date.now()-started)/duration);bar.style.width=(ratio*100)+"%";pct.textContent=Math.floor(ratio*100)+"%";if(ratio>=1){clearInterval(timer);resolve()}};const timer=setInterval(tick,100);tick()});
+  try{
+   const snap=await get(ref(db,"loginSettings/current"));if(snap.exists())applySettings(snap.val());
+   localStorage.setItem("rg_login_release_seen",String(latest));
+   label.textContent="Update Complete";pct.textContent="100%";document.getElementById("rgProcessingHint").textContent="Your update has been completed successfully.";b.textContent="COMPLETED";
+   setTimeout(()=>layer.remove(),900);
+  }catch(e){b.disabled=false;b.style.opacity="1";b.textContent="RETRY UPDATE";label.textContent="Update failed";document.getElementById("rgProcessingHint").textContent="Could not load update settings. Please check your connection and retry."}
+ };
+});
+</script>
+
+</body></html>
